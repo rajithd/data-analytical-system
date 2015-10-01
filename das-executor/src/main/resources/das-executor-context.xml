@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+ http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:property-placeholder location="classpath*:das.properties"/>
+
+    <context:component-scan base-package="com.rd.executor"/>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${das.jdbc.driver}"/>
+        <property name="url" value="${das.jdbc.url}"/>
+        <property name="username" value="${das.jdbc.username}"/>
+        <property name="password" value="${das.jdbc.password}"/>
+        <!--when checking for idle connection query entered here shall be run   -->
+        <property name="validationQuery" value="SELECT 1"/>
+        <property name="testOnBorrow" value="true"/>
+        <!--time in millis between which you want to run idle connection test-->
+        <property name="timeBetweenEvictionRunsMillis" value="3600"/>
+        <!--When there are no requests dbcp will check for idle connections-->
+        <property name="testWhileIdle" value="true"/>
+        <!--eliminate any connection which has been idle for more than specified millis-->
+        <property name="minEvictableIdleTimeMillis" value="3600"/>
+        <property name="initialSize" value="20"/>
+        <property name="maxActive" value="25"/>
+    </bean>
+
+    <bean id="hiveDriver" class="org.apache.hadoop.hive.jdbc.HiveDriver"/>
+
+    <bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driver" ref="hiveDriver"/>
+        <property name="url" value="${hive.url}"/>
+    </bean>
+
+    <bean id="oltpJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="hiveTableImportServiceTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="hiveTableImportServiceTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="hiveTableExecuteManager"/>
+        <property name="cronExpression" value="${hive.table.import.executor.cron.expression}"/>
+    </bean>
+
+    <bean id="hiveTableExecuteManager"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="concurrent" value="false"/>
+        <property name="targetObject">
+            <ref bean="hiveTableImportingExecutor"/>
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+    </bean>
+
+    <bean id="hiveTableImportingExecutor" class="com.rd.executor.hive.HiveTableImportingExecutor">
+        <property name="dataBaseMetaDataService" ref="dataBaseMetaDataService"/>
+        <property name="hiveDataSource" ref="hiveDataSource"/>
+        <property name="relationalDataSource" ref="dataSource"/>
+        <property name="executorService" ref="tableImporterThreadPool"/>
+    </bean>
+
+    <bean id="dataBaseMetaDataService" class="com.rd.executor.repository.metadata.impl.DataBaseMetaDataServiceImpl">
+        <property name="liquibase" ref="liquibase"/>
+    </bean>
+
+    <bean id="liquibase" class="com.rd.executor.repository.metadata.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="contexts" value="test, production"/>
+    </bean>
+
+    <bean id="tableImportExecutor" class="com.rd.executor.hive.TableImportExecutor">
+    </bean>
+
+    <bean id="tableImporterThreadPool" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+        <constructor-arg value="10"/>
+    </bean>
+
+</beans>

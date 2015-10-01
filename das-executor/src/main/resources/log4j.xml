@@ -42,5 +42,17 @@
         <appender-ref ref="trace"/>
     </logger>
 
+    <logger name="org.quartz">
+        <level value="info"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="trace"/>
+    </logger>
+
+    <logger name="org.apache">
+        <level value="info"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="trace"/>
+    </logger>
+
 </log4j:configuration>
 

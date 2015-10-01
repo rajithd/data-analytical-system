@@ -181,7 +181,7 @@ public class HiveTableImporter {
             case 2:
                 return "INT";    //INTEGER
             case 3:
-                return "number";
+                return "DOUBLE";
             case 4:
                 return "INT"; //INT
             case -5:

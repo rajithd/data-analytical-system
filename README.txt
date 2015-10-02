@@ -3,7 +3,7 @@ Prerequisites
 1. Java 1.8
 2. Maven 3
 3. Hadoop 2.6.0
-4. Hive 0.9.0
+4. Hive 1.0.1
 
 Setup Java (Ubuntu OS)
 ======================
@@ -118,7 +118,7 @@ hadoop namenode -format
 Change directory to hadoop-2.6.0/sbin
 
 Run following command to start dfs and yarn
-sh start-all.sh
+./start-all.sh
 
 Setup Hive
 ==========
@@ -174,10 +174,12 @@ The name of the default file system.  A URI whose    scheme and authority determ
 </property>
 </configuration>
 
-5. Loggin to mysql and source following script located in apache-hive-1.0.1-bin/scripts/metastore/upgrade/mysql
+5. Create database called metastore_db in mysql and use metastore_db.
+
+6. Loggin to mysql and source following script located in apache-hive-1.0.1-bin/scripts/metastore/upgrade/mysql
  source hive-schema-0.9.0.mysql.sql
 
-6. Start the hive server using following command
+7. Start the hive server using following command
 ./hiveserver2
 
 Setup Database
@@ -221,9 +223,3 @@ Press Key 1 to 4 to generate report
 Feedback
 ========
 1. Instead of README.txt its better to have the markdown format (README.md).
-
-
-
-
-
-

@@ -6,6 +6,8 @@ public class VisitedProductAnalytic {
     private String customerName;
     private String productName;
     private Long productId;
+    private Long productCategoryId;
+    private String categoryName;
 
     public Long getCustomerId() {
         return customerId;
@@ -37,5 +39,21 @@ public class VisitedProductAnalytic {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public Long getProductCategoryId() {
+        return productCategoryId;
+    }
+
+    public void setProductCategoryId(Long productCategoryId) {
+        this.productCategoryId = productCategoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

@@ -27,14 +27,60 @@ public class RuleExecutor {
                 case "2":
                     recommendedProductsBySearch();
                     break;
+                case "3":
+                    advertiseProductsByBrand();
+                    break;
+                case "4":
+                    advertiseProductsByPurchase();
+                    break;
                 default:
                     throw new UnsupportedOperationException("Unsupported rule type");
             }
         } catch (Exception e) {
             LOGGER.error("Error occur while processing rule", e);
         }
+    }
 
+    private void advertiseProductsByPurchase() throws SQLException {
+        List<VisitedProductAnalytic> visitedProducts = hiveDao.getProductsByPurchase();
+        LOGGER.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        LOGGER.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        LOGGER.info("------------   Advertise products by Purchase -----------------------");
+        LOGGER.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        Long customerId = null;
+        String categoryName = null;
+        for (VisitedProductAnalytic analytic : visitedProducts) {
+            if (analytic.getCustomerId().equals(customerId) && analytic.getCategoryName().equals(categoryName)) {
+            } else {
+                LOGGER.info("-------------------------------------------------------------");
+                LOGGER.info("^^^^^  Advertise result for Customer id : {} and name : {} ^^^^^^^", analytic.getCustomerId(), analytic.getCustomerName());
+                LOGGER.info("-------------------------------------------------------------");
+                customerId = analytic.getCustomerId();
+                categoryName = analytic.getCategoryName();
+                LOGGER.info("----->>  More Advertisements on brand new {} ", analytic.getCategoryName());
+            }
+        }
+    }
 
+    private void advertiseProductsByBrand() throws SQLException {
+        List<VisitedProductAnalytic> visitedProducts = hiveDao.getProductsByCategory();
+        LOGGER.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        LOGGER.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        LOGGER.info("------------   Advertise products by Brand -------------------------");
+        LOGGER.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        Long customerId = null;
+        String categoryName = null;
+        for (VisitedProductAnalytic analytic : visitedProducts) {
+            if (analytic.getCustomerId().equals(customerId) && analytic.getCategoryName().equals(categoryName)) {
+            } else {
+                LOGGER.info("-------------------------------------------------------------");
+                LOGGER.info("^^^^^  Advertise result for Customer id : {} and name : {} ^^^^^^^", analytic.getCustomerId(), analytic.getCustomerName());
+                LOGGER.info("-------------------------------------------------------------");
+                customerId = analytic.getCustomerId();
+                categoryName = analytic.getCategoryName();
+                LOGGER.info("----->>  More Advertisements on {} ", analytic.getCategoryName());
+            }
+        }
     }
 
     private void recommendedProductsBySearch() throws SQLException {

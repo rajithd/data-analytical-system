@@ -1,5 +1,6 @@
 package com.rd.executor.boot;
 
+import com.rd.executor.hive.HiveTableImportingExecutor;
 import com.rd.executor.rule.RuleExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +25,15 @@ public class Boot {
         LOGGER.info("####                       DAS Started                                  #####");
         LOGGER.info("#############################################################################");
         LOGGER.info("#############################################################################");
-//        HiveTableImportingExecutor hiveTableImportingExecutor = (HiveTableImportingExecutor) context.getBean("hiveTableImportingExecutor");
-//        hiveTableImportingExecutor.execute();
+        HiveTableImportingExecutor hiveTableImportingExecutor = (HiveTableImportingExecutor) context.getBean("hiveTableImportingExecutor");
+        hiveTableImportingExecutor.execute();
 
         LOGGER.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         LOGGER.info("++++++++++++++++++++ Available report types +++++++++++++++++++++++++++++++++");
         LOGGER.info("-------- 1. Recommended products by visited products ------------------------");
         LOGGER.info("-------- 2. Recommended products by search criteria -------------------------");
+        LOGGER.info("-------- 3. Advertise products by Brand -------------------------------------");
+        LOGGER.info("-------- 4. Advertise products by Purchase ----------------------------------");
         LOGGER.info("--------  Please specify your report type by entering the number ? ---------- ");
         String input = sc.nextLine();
 

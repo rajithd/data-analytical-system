@@ -209,12 +209,14 @@ unzip das-executor.zip
 cd das-executor/bin
 
 4. Run following command to execute DAS
-sh das-executor start - start in background
-sd das-executor console - start in current terminal
+sh das-executor console
 
-5. To check the logs navigate to logs and tail
-cd das-executor/logs
-tail -f das-trace.log
+5. DAS will list down 4 report types that you can generate
+Press Key 1 to 4 to generate report
+   1. Recommended products by visited products
+   2. Recommended products by search criteria
+   3. Advertise products by Brand
+   4. Advertise products by Purchase
 
 Feedback
 ========

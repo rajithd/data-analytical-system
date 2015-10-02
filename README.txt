@@ -122,6 +122,7 @@ sh start-all.sh
 
 Setup Hive
 ==========
+TOD
 
 Setup Database
 ==============
@@ -158,6 +159,12 @@ sd das-executor console - start in current terminal
 5. To check the logs navigate to logs and tail
 cd das-executor/logs
 tail -f das-trace.log
+
+Feedback
+========
+1. Instead of README.txt its better to have the markdown format (README.md).
+
+
 
 
 

@@ -46,8 +46,8 @@
         <property name="url" value="${hive.url}"/>
     </bean>
 
-    <bean id="oltpJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
+    <bean id="hiveJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="hiveDataSource"/>
     </bean>
 
     <bean id="liquibase" class="com.rd.executor.repository.metadata.spring.SpringLiquibase">

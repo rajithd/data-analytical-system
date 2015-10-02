@@ -96,11 +96,11 @@
             </dependency>
 
             <!-- Apache Commons -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.apache.commons</groupId>-->
+                <!--<artifactId>commons-lang3</artifactId>-->
+                <!--<version>${commons-lang3.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
@@ -217,4 +217,18 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -37,7 +36,6 @@ public class HiveTableImportingExecutor extends TableImportExecutor {
     @Autowired
     private ExecutorService executorService;
 
-    @Scheduled(cron="${hive.table.import.executor.cron.expression}")
     public void execute() throws Exception {
         LOGGER.info("=======================================================================");
         LOGGER.info("#####           Hive Table Importer Starting...                   #####");
@@ -68,19 +66,4 @@ public class HiveTableImportingExecutor extends TableImportExecutor {
         return tableNames;
     }
 
-    public void setDataBaseMetaDataService(DataBaseMetaDataService dataBaseMetaDataService) {
-        this.dataBaseMetaDataService = dataBaseMetaDataService;
-    }
-
-    public void setHiveDataSource(DataSource hiveDataSource) {
-        this.hiveDataSource = hiveDataSource;
-    }
-
-    public void setRelationalDataSource(DataSource relationalDataSource) {
-        this.relationalDataSource = relationalDataSource;
-    }
-
-    public void setExecutorService(ExecutorService executorService) {
-        this.executorService = executorService;
-    }
 }

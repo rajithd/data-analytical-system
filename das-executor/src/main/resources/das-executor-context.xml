@@ -39,7 +39,7 @@
         <property name="maxActive" value="25"/>
     </bean>
 
-    <bean id="hiveDriver" class="org.apache.hadoop.hive.jdbc.HiveDriver"/>
+    <bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
 
     <bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driver" ref="hiveDriver"/>

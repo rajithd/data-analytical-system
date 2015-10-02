@@ -122,8 +122,63 @@ sh start-all.sh
 
 Setup Hive
 ==========
-./hive --service hiveserver -p 10001
-TOD
+1. Download hive 1.0.1 version
+http://www.eu.apache.org/dist/hive/hive-1.0.1/
+
+2. Extract it
+
+3. Copy mysql-connector.jar (Located in data-analytical-system/distribution) to apache-hive-1.0.1-bin/lib
+
+4. Create hive-site.xml file inside apache-hive-1.0.1-bin/conf and add following configuration
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+ <property>
+    <name>fs.default.name</name>
+    <value>hdfs://localhost:54310</value>-  <!--
+The name of the default file system.  A URI whose    scheme and authority determine the FileSystem implementation. can be found on Hadoop_home/conf/core-site.xml  -->
+ </property>
+
+ <property>
+   <name>javax.jdo.option.ConnectionURL</name>
+   <value>jdbc:mysql://127.0.0.1:3306/metastore_db</value> <!-- MySQL database url-->
+ </property>
+
+ <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>com.mysql.jdbc.Driver</value>    <!-- MySQL jdbc driver-->
+  </property>
+<property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>root</value> <!--  username of the respective database -->
+ </property>
+
+ <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>123</value>  <!--  password of the respective database -->
+ </property>
+
+ <property>
+    <name>datanucleus.autoCreateSchema</name>
+    <value>false</value>
+ </property>
+
+ <property>
+     <name>datanucleus.fixedDatastore</name>
+     <value>true</value>
+  </property>
+
+<property>
+ <name>hive.server2.thrift.port</name>
+ <value>10001</value>
+</property>
+</configuration>
+
+5. Loggin to mysql and source following script located in apache-hive-1.0.1-bin/scripts/metastore/upgrade/mysql
+ source hive-schema-0.9.0.mysql.sql
+
+6. Start the hive server using following command
+./hiveserver2
 
 Setup Database
 ==============

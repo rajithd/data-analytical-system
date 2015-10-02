@@ -5,6 +5,10 @@ import com.rd.domain.hive.Table;
 import com.rd.executor.repository.DataBaseMetaDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -14,15 +18,26 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
+@Service
 public class HiveTableImportingExecutor extends TableImportExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HiveTableImportingExecutor.class);
 
+    @Autowired
     private DataBaseMetaDataService dataBaseMetaDataService;
+
+    @Autowired
+    @Qualifier("hiveDataSource")
     private DataSource hiveDataSource;
+
+    @Autowired
+    @Qualifier("dataSource")
     private DataSource relationalDataSource;
+
+    @Autowired
     private ExecutorService executorService;
 
+    @Scheduled(cron="${hive.table.import.executor.cron.expression}")
     public void execute() throws Exception {
         LOGGER.info("=======================================================================");
         LOGGER.info("#####           Hive Table Importer Starting...                   #####");

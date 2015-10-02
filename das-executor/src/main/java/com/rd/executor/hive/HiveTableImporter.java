@@ -81,12 +81,6 @@ public class HiveTableImporter {
         return fileWriteState.getNumberOfRecord();
     }
 
-    private DynamicStreamResultSet getAllRecords(String table, List<String> columns, Map<String, String> values,
-                                                 DataSource dataSource,
-                                                 Limit limit) throws Exception {
-        return getAllRecords(table, columns, values, dataSource, limit, false);
-    }
-
     private DynamicStreamResultSet getAllRecords(String table,
                                                  List<String> columns,
                                                  Map<String, String> values,

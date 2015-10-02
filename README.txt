@@ -122,6 +122,7 @@ sh start-all.sh
 
 Setup Hive
 ==========
+./hive --service hiveserver -p 10001
 TOD
 
 Setup Database

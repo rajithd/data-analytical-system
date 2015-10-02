@@ -12,10 +12,4 @@ public interface DataBaseMetaDataService {
 
     List<Column> getColumns(String tableName);
 
-    List<Column> getColumns(Table table);
-
-    Column getColumnInTable(String tableName, String columnName);
-
-    Table getTable(String tableName);
-
 }

@@ -15,15 +15,19 @@ import liquibase.snapshot.jvm.JdbcDatabaseSnapshotGenerator;
 import liquibase.snapshot.jvm.StandardJdbcDatabaseSnapshotGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Service("dataBaseMetaDataService")
 public class DataBaseMetaDataServiceImpl implements DataBaseMetaDataService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataBaseMetaDataServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataBaseMetaDataServiceImpl.class);
 
+    @Autowired
     private SpringLiquibase liquibase;
 
 
@@ -54,51 +58,14 @@ public class DataBaseMetaDataServiceImpl implements DataBaseMetaDataService {
         try {
             liquibase.database.structure.Table apiTable = getDatabaseSnapshot().getTable(tableName);
             if (apiTable == null) {
-                logger.info("No table found for the given table name [{}]", tableName);
+                LOGGER.info("No table found for the given table name [{}]", tableName);
             }
             List<liquibase.database.structure.Column> apiColumns = apiTable.getColumns();
             columns = getColumnListFromApiColumns(apiColumns);
         } catch (Exception e) {
-            logger.error("Error occurred in retrieving a columns in ["+ tableName +"]", e);
+            LOGGER.error("Error occurred in retrieving a columns in [" + tableName + "]", e);
         }
         return columns;
-    }
-
-    @Override
-    public List<Column> getColumns(Table table) {
-        if (table == null) {
-            return null;
-        }
-        List<Column> columns = table.getColumns();
-        return columns;
-    }
-
-    @Override
-    public Column getColumnInTable(String tableName, String columnName) {
-        if (tableName == null || columnName == null) {
-            return null;
-        }
-        liquibase.database.structure.Table apiTable = getDatabaseSnapshot().getTable(tableName);
-        if (apiTable == null) {
-            return null;
-        }
-        liquibase.database.structure.Column apiColumn = apiTable.getColumn(columnName);
-        if (apiColumn == null) {
-            return null;
-        }
-        Column column = getColumnFromApiColumn(apiColumn);
-
-        return column;
-    }
-
-    @Override
-    public Table getTable(String tableName) {
-        if (tableName == null) {
-            return null;
-        }
-        liquibase.database.structure.Table apiTable = getDatabaseSnapshot().getTable(tableName);
-        Table table = getTableFromApiTable(apiTable);
-        return table;
     }
 
     private DatabaseSnapshot getDatabaseSnapshot() {
@@ -110,13 +77,13 @@ public class DataBaseMetaDataServiceImpl implements DataBaseMetaDataService {
 
             databaseSnapshot = jdbcDatabaseSnapshotGenerator.createSnapshot(db, null, null);
         } catch (DatabaseException e) {
-            logger.error("Error in getting database snapshot, ", e);
+            LOGGER.error("Error in getting database snapshot, ", e);
         } finally {
             if(db != null) {
                 try {
                     db.close();
                 } catch (Exception e) {
-                    logger.error("Error in closing Liquibase database. Connection could not be recovered.");
+                    LOGGER.error("Error in closing Liquibase database. Connection could not be recovered.");
                 }
             }
         }
@@ -138,7 +105,7 @@ public class DataBaseMetaDataServiceImpl implements DataBaseMetaDataService {
 
     private Table getTableFromApiTable(liquibase.database.structure.Table apiTable) {
         if (apiTable == null) {
-            logger.info("Table doesn't exists to get a table form metadata service....");
+            LOGGER.info("Table doesn't exists to get a table form metadata service....");
             return null;
         }
         Table table = new Table(apiTable.getName().toLowerCase(), apiTable.getRemarks(), apiTable.getSchema());
@@ -161,9 +128,5 @@ public class DataBaseMetaDataServiceImpl implements DataBaseMetaDataService {
                 apiColumn.isPrimaryKey(), apiColumn.isUnique(), apiColumn.isCertainDataType(), apiColumn.getRemarks());
 
         return column;
-    }
-
-    public void setLiquibase(SpringLiquibase liquibase) {
-        this.liquibase = liquibase;
     }
 }
